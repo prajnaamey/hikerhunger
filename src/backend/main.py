@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from typing import Optional
 import uvicorn
+from .services.calorie_calculator import calculate_hiking_calories
 
 app = FastAPI(
     title="HikerHunger API",
@@ -46,38 +47,37 @@ async def calculate_calories(
     # Hiker Experience (Optional)
     hikerExperience: Optional[str] = Query(None, description="Hiker experience level (beginner, intermediate, advanced, expert)")
 ):
-    # Simply return all the parameters that were passed in
+    # Prepare parameters for calculation
+    params = {
+        "weight": weight,
+        "height": height,
+        "age": age,
+        "gender": gender,
+        "activityLevel": activityLevel,
+        "tripDuration": tripDuration,
+        "trailDistance": trailDistance,
+        "totalelevation": totalelevation,
+        "season": season,
+        "day": day,
+        "trailDistanceByDay": trailDistanceByDay,
+        "totalelevationByDay": totalelevationByDay,
+        "averageTemperature": averageTemperature,
+        "minTemperature": minTemperature,
+        "maxTemperature": maxTemperature,
+        "peakaltitude": peakaltitude,
+        "precipitationChance": precipitationChance,
+        "baseWeight": baseWeight,
+        "waterWeight": waterWeight,
+        "hikerExperience": hikerExperience
+    }
+    
+    # Calculate calories using the service
+    total_calories = calculate_hiking_calories(params)
+    
+    # Return the result
     return {
-        "user_biometrics": {
-            "weight": weight,
-            "height": height,
-            "age": age,
-            "gender": gender,
-            "activityLevel": activityLevel
-        },
-        "trip_details": {
-            "tripDuration": tripDuration,
-            "trailDistance": trailDistance,
-            "totalelevation": totalelevation,
-            "season": season
-        },
-        "trip_breakdown": {
-            "day": day,
-            "trailDistanceByDay": trailDistanceByDay,
-            "totalelevationByDay": totalelevationByDay
-        },
-        "environmental_factors": {
-            "averageTemperature": averageTemperature,
-            "minTemperature": minTemperature,
-            "maxTemperature": maxTemperature,
-            "peakaltitude": peakaltitude,
-            "precipitationChance": precipitationChance
-        },
-        "pack_weight": {
-            "baseWeight": baseWeight,
-            "waterWeight": waterWeight
-        },
-        "hiker_experience": hikerExperience
+        "total_calories": total_calories,
+        "input_parameters": params
     }
 
 if __name__ == "__main__":
