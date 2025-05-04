@@ -27,3 +27,4 @@ The spreadsheet is clunky, time-consuming, and provides a poor user experience. 
 ## MVP Features
 - Calorie calculations based on hiking parameters
 - Food weight optimization
+- Recommend meal plans
