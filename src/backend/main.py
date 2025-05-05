@@ -25,6 +25,13 @@ app.add_middleware(
 async def root():
     return {"message": "HikerHunger API is running"}
 
+def parse_csv_param(param, type_cast=float):
+    if param is None:
+        return None
+    if isinstance(param, str):
+        return [type_cast(x) for x in param.split(',') if x]
+    return param
+
 @app.get("/v1/api/calculate-calories", response_model=CalorieResponse)
 async def calculate_calories(
     # User Biometrics (Required)
@@ -42,8 +49,8 @@ async def calculate_calories(
     
     # Trip Details Breakdown (Optional)
     day: Optional[int] = Query(None, description="Day number"),
-    trailDistanceByDay: Optional[float] = Query(None, description="Daily trail distance in miles"),
-    totalElevationByDay: Optional[int] = Query(None, description="Daily elevation gain in feet"),
+    trailDistanceByDay: Optional[str] = Query(None, description="Daily trail distance in miles (CSV)"),
+    totalElevationByDay: Optional[str] = Query(None, description="Daily elevation gain in feet (CSV)"),
     
     # Environmental Factors (Optional)
     averageTemperature: Optional[float] = Query(None, description="Average temperature in Fahrenheit"),
@@ -71,8 +78,8 @@ async def calculate_calories(
         "totalElevation": totalElevation,
         "season": season,
         "day": day,
-        "trailDistanceByDay": trailDistanceByDay,
-        "totalElevationByDay": totalElevationByDay,
+        "trailDistanceByDay": parse_csv_param(trailDistanceByDay, float),
+        "totalElevationByDay": parse_csv_param(totalElevationByDay, int),
         "averageTemperature": averageTemperature,
         "minTemperature": minTemperature,
         "maxTemperature": maxTemperature,
