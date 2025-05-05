@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
 from .schemas import CalorieResponse
 from .schemas.meal import MealRecommendationRequest, MealRecommendationResponse
+from utils.helpers import parse_csv_param
 
 app = FastAPI(
     title="HikerHunger API",
@@ -24,13 +25,6 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "HikerHunger API is running"}
-
-def parse_csv_param(param, type_cast=float):
-    if param is None:
-        return None
-    if isinstance(param, str):
-        return [type_cast(x) for x in param.split(',') if x]
-    return param
 
 @app.get("/v1/api/calculate-calories", response_model=CalorieResponse)
 async def calculate_calories(
