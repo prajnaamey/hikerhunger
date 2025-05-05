@@ -82,12 +82,9 @@ interface DayBreakdown {
 }
 
 interface CalorieResponse {
-  total_calories: {
-    daily_breakdown: DayBreakdown[];
-    total_calories: number;
-    total_macros: MacroData;
-  };
-  input_parameters: FormData;
+  daily_breakdown: DayBreakdown[];
+  total_calories: number;
+  total_macros: MacroData;
 }
 
 const CalorieCalculator: React.FC = () => {
@@ -521,11 +518,7 @@ const CalorieCalculator: React.FC = () => {
                   <StatGroup>
                     <Stat>
                       <StatLabel>Total Calories</StatLabel>
-                      <StatNumber>{formatNumber(calculationResult.total_calories.total_calories)}</StatNumber>
-                    </Stat>
-                    <Stat>
-                      <StatLabel>Total Days</StatLabel>
-                      <StatNumber>{calculationResult.total_calories.daily_breakdown.length}</StatNumber>
+                      <StatNumber>{formatNumber(calculationResult.total_calories)}</StatNumber>
                     </Stat>
                   </StatGroup>
                 </Box>
@@ -537,19 +530,19 @@ const CalorieCalculator: React.FC = () => {
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="green.50">
                       <Stat>
                         <StatLabel>Carbs (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.carbs)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.carbs)}</StatNumber>
                       </Stat>
                     </Box>
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="yellow.50">
                       <Stat>
                         <StatLabel>Fat (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.fat)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.fat)}</StatNumber>
                       </Stat>
                     </Box>
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="red.50">
                       <Stat>
                         <StatLabel>Protein (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.protein)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.protein)}</StatNumber>
                       </Stat>
                     </Box>
                   </Grid>
@@ -570,7 +563,7 @@ const CalorieCalculator: React.FC = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {calculationResult.total_calories.daily_breakdown.map((day) => (
+                      {calculationResult.daily_breakdown.map((day) => (
                         <Tr key={day.day}>
                           <Td>{day.day}</Td>
                           <Td>{formatNumber(day.calories)}</Td>
@@ -589,14 +582,14 @@ const CalorieCalculator: React.FC = () => {
                   <Heading size="md" mb={4}>Trip Details</Heading>
                   <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                     <Box>
-                      <Text><strong>Distance:</strong> {calculationResult.input_parameters.trailDistance} miles</Text>
-                      <Text><strong>Elevation Gain:</strong> {calculationResult.input_parameters.totalelevation} ft</Text>
-                      <Text><strong>Season:</strong> {calculationResult.input_parameters.season}</Text>
+                      <Text><strong>Distance:</strong> {formData.trailDistance} miles</Text>
+                      <Text><strong>Elevation Gain:</strong> {formData.totalelevation} ft</Text>
+                      <Text><strong>Season:</strong> {formData.season}</Text>
                     </Box>
                     <Box>
-                      <Text><strong>Pack Weight:</strong> {calculationResult.input_parameters.baseWeight} lbs</Text>
-                      <Text><strong>Water Weight:</strong> {calculationResult.input_parameters.waterWeight} lbs</Text>
-                      <Text><strong>Experience:</strong> {calculationResult.input_parameters.hikerExperience}</Text>
+                      <Text><strong>Pack Weight:</strong> {formData.baseWeight || 0} lbs</Text>
+                      <Text><strong>Water Weight:</strong> {formData.waterWeight || 0} lbs</Text>
+                      <Text><strong>Experience:</strong> {formData.hikerExperience || 'Not specified'}</Text>
                     </Box>
                   </Grid>
                 </Box>

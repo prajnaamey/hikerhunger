@@ -3,6 +3,7 @@ from typing import Optional
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
+from .schemas import CalorieResponse
 
 app = FastAPI(
     title="HikerHunger API",
@@ -23,7 +24,7 @@ app.add_middleware(
 async def root():
     return {"message": "HikerHunger API is running"}
 
-@app.get("/v1/api/calculate-calories")
+@app.get("/v1/api/calculate-calories", response_model=CalorieResponse)
 async def calculate_calories(
     # User Biometrics (Required)
     weight: int = Query(..., description="Weight in lbs"),
@@ -82,13 +83,10 @@ async def calculate_calories(
     }
     
     # Calculate calories using the service
-    total_calories = calculate_hiking_calories(params)
+    result = calculate_hiking_calories(params)
     
-    # Return the result
-    return {
-        "total_calories": total_calories,
-        "input_parameters": params
-    }
+    # Convert TypedDict to Pydantic model
+    return CalorieResponse(**result)
 
 if __name__ == "__main__":
     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True) 
