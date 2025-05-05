@@ -152,7 +152,7 @@ Response
 
 ```
 
-2. `/v1/api/calculate-calories` (GET)
+2. `/v1/api/meal-recommendations` (GET)
 
    - Query parameters for calorie requirements
    - Returns recommended meal plans
