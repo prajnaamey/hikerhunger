@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
 from .schemas import CalorieResponse
 from .schemas.meal import MealRecommendationRequest, MealRecommendationResponse
-from utils.helpers import parse_csv_param
+from .utils.helpers import parse_csv_param
 
 app = FastAPI(
     title="HikerHunger API",
