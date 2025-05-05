@@ -60,7 +60,7 @@ We're keeping the initial deployment simple with a single-region approach becaus
 ## API Design
 ### Endpoints:
 
-`/v1/api/calculate-calories` (GET)
+1. `/v1/api/calculate-calories` (GET)
 *  Query parameters for user biometrics and trail information
 * Returns calculated calorie requirements
 * Stateless operation with no data persistence
@@ -152,10 +152,121 @@ Response
 
 ```
 
-2. `/api/recommend-meals` (GET)
+2. `/v1/api/calculate-calories` (GET)
+
    - Query parameters for calorie requirements
    - Returns recommended meal plans
    - No user data storage
+
+
+API
+```
+GET /v1/api/meal-recommendations
+
+```
+
+**Request Parameters**
+
+Calorie Requirements (Required)
+
+* totalCalories: integer (total calories for entire trip)
+* totalCarbohydratesCalories: integer (total carbohydrate calories)
+* totalProteinCalories: integer (total protein calories)
+* totalFatCalories: integer (total fat calories)
+
+Daily Breakdown (Required)
+
+* dailyRequirements: array of objects
+    * day: integer (day number)
+    * calories: integer (calories for this day)
+    * carbohydratesCalories: integer (carb calories for this day)
+    * proteinCalories: integer (protein calories for this day)
+    * fatCalories: integer (fat calories for this day)
+
+Trip Details (Required)
+
+* tripDuration: integer (number of days)
+
+Response:
+```
+{
+  "mealPlan": {
+    "totalTripCalories": integer,
+    "totalTripWeight": float,
+    "totalMealCount": integer,
+    "totalSnackCount": integer,
+    "macroBreakdown": {
+      "carbohydrates": {
+        "grams": integer,
+        "calories": integer,
+        "percentage": integer
+      },
+      "protein": {
+        "grams": integer,
+        "calories": integer,
+        "percentage": integer
+      },
+      "fat": {
+        "grams": integer,
+        "calories": integer,
+        "percentage": integer
+      }
+    }
+  },
+  "dailyMealPlans": [
+    {
+      "day": integer,
+      "totalDayCalories": integer,
+      "totalDayWeight": float,
+      "meals": {
+        "breakfast": [
+          {
+            "name": string,
+            "calories": integer,
+            "weight": float,
+            "carbohydrates": integer,
+            "protein": integer,
+            "fat": integer,
+            "prepTime": integer
+          }
+        ],
+        "lunch": [
+          {
+            "name": string,
+            "calories": integer,
+            "weight": float,
+            "carbohydrates": integer,
+            "protein": integer,
+            "fat": integer,
+            "prepTime": integer
+          }
+        ],
+        "dinner": [
+          {
+            "name": string,
+            "calories": integer,
+            "weight": float,
+            "carbohydrates": integer,
+            "protein": integer,
+            "fat": integer,
+            "prepTime": integer
+          }
+        ],
+        "snacks": [
+          {
+            "name": string,
+            "calories": integer,
+            "weight": float,
+            "carbohydrates": integer,
+            "protein": integer,
+            "fat": integer
+          }
+        ]
+      }
+    }
+  ]
+}
+```
 
 3. `/api/meals` (GET)
    - Returns available meal options from database
