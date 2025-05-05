@@ -32,19 +32,19 @@ class CalorieCalculationParams(BaseModel):
     # Trip Details (Required)
     tripDuration: int
     trailDistance: float
-    totalelevation: int
+    totalElevation: int
     season: str
     
     # Trip Details Breakdown (Optional)
     day: Optional[int] = None
     trailDistanceByDay: Optional[float] = None
-    totalelevationByDay: Optional[int] = None
+    totalElevationByDay: Optional[int] = None
     
     # Environmental Factors (Optional)
     averageTemperature: Optional[float] = None
     minTemperature: Optional[float] = None
     maxTemperature: Optional[float] = None
-    peakaltitude: Optional[int] = None
+    peakAltitude: Optional[int] = None
     precipitationChance: Optional[int] = None
     
     # Pack Weight (Optional)

@@ -65,10 +65,10 @@ def hiking_hours_calculator(params: CalorieCalculationInput, day: int) -> float:
     else:
         distance = params["trailDistance"] / params["tripDuration"]
         
-    if isinstance(params.get("totalelevationByDay"), list):
-        elevation = params["totalelevationByDay"][day-1]
+    if isinstance(params.get("totalElevationByDay"), list):
+        elevation = params["totalElevationByDay"][day-1]
     else:
-        elevation = params["totalelevation"] / params["tripDuration"]
+        elevation = params["totalElevation"] / params["tripDuration"]
     
     # Using modified Naismith's Rule: 3mph on flat, +1 hour per 2000ft climb
     return distance / 3 + (elevation / 2000)
@@ -101,10 +101,10 @@ def calculate_daily_calories(params: CalorieCalculationInput, day: int) -> int:
             fatigue_factor = min(1.0 + (day - 1) * 0.02, 1.1)
             distance *= fatigue_factor
             
-    if isinstance(params.get("totalelevationByDay"), list):
-        elevation = params["totalelevationByDay"][day-1]
+    if isinstance(params.get("totalElevationByDay"), list):
+        elevation = params["totalElevationByDay"][day-1]
     else:
-        elevation = params["totalelevation"] / params["tripDuration"]
+        elevation = params["totalElevation"] / params["tripDuration"]
     
     # 4. Calculate hiking duration
     hiking_hours = distance / 3 + (elevation / 2000)
@@ -160,8 +160,8 @@ def calculate_daily_calories(params: CalorieCalculationInput, day: int) -> int:
     
     # Altitude adjustment
     altitude_factor = 1.0
-    if params.get("peakaltitude") and params["peakaltitude"] > 5000:
-        altitude_factor += (params["peakaltitude"] - 5000) / 3000 * 0.05
+    if params.get("peakAltitude") and params["peakAltitude"] > 5000:
+        altitude_factor += (params["peakAltitude"] - 5000) / 3000 * 0.05
     
     # Experience adjustment
     experience_factors = {

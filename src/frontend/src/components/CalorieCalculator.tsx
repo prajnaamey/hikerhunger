@@ -52,17 +52,17 @@ interface FormData {
   // Trip Details
   tripDuration: number;
   trailDistance: string;
-  totalelevation: number;
+  totalElevation: number;
   season: string;
   
   // Optional Fields
   day?: number;
   trailDistanceByDay?: string;
-  totalelevationByDay?: number;
+  totalElevationByDay?: number;
   averageTemperature?: number;
   minTemperature?: number;
   maxTemperature?: number;
-  peakaltitude?: number;
+  peakAltitude?: number;
   precipitationChance?: number;
   baseWeight?: string;
   waterWeight?: string;
@@ -104,7 +104,7 @@ const CalorieCalculator: React.FC = () => {
     activityLevel: 'moderately_active',
     tripDuration: 3,
     trailDistance: "34.0",
-    totalelevation: 5000,
+    totalElevation: 5000,
     season: 'summer',
     baseWeight: "0.0",
     waterWeight: "0.0",
@@ -147,17 +147,17 @@ const CalorieCalculator: React.FC = () => {
       queryParams.append('activityLevel', formData.activityLevel);
       queryParams.append('tripDuration', formData.tripDuration.toString());
       queryParams.append('trailDistance', parseFloat(formData.trailDistance).toString());
-      queryParams.append('totalelevation', formData.totalelevation.toString());
+      queryParams.append('totalElevation', formData.totalElevation.toString());
       queryParams.append('season', formData.season);
 
       // Optional fields - only append if they have values
       if (formData.day) queryParams.append('day', formData.day.toString());
       if (formData.trailDistanceByDay) queryParams.append('trailDistanceByDay', parseFloat(formData.trailDistanceByDay).toString());
-      if (formData.totalelevationByDay) queryParams.append('totalelevationByDay', formData.totalelevationByDay.toString());
+      if (formData.totalElevationByDay) queryParams.append('totalElevationByDay', formData.totalElevationByDay.toString());
       if (formData.averageTemperature) queryParams.append('averageTemperature', formData.averageTemperature.toString());
       if (formData.minTemperature) queryParams.append('minTemperature', formData.minTemperature.toString());
       if (formData.maxTemperature) queryParams.append('maxTemperature', formData.maxTemperature.toString());
-      if (formData.peakaltitude) queryParams.append('peakaltitude', formData.peakaltitude.toString());
+      if (formData.peakAltitude) queryParams.append('peakAltitude', formData.peakAltitude.toString());
       if (formData.precipitationChance) queryParams.append('precipitationChance', formData.precipitationChance.toString());
       if (formData.baseWeight) queryParams.append('baseWeight', parseFloat(formData.baseWeight).toString());
       if (formData.waterWeight) queryParams.append('waterWeight', parseFloat(formData.waterWeight).toString());
@@ -353,8 +353,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl isRequired>
                 <FormLabel>Total Elevation (feet)</FormLabel>
                 <NumberInput
-                  value={formData.totalelevation}
-                  onChange={(_, value) => handleInputChange('totalelevation', value)}
+                  value={formData.totalElevation}
+                  onChange={(_, value) => handleInputChange('totalElevation', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -425,8 +425,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl>
                 <FormLabel>Daily Elevation Gain (feet)</FormLabel>
                 <NumberInput
-                  value={formData.totalelevationByDay}
-                  onChange={(_, value) => handleInputChange('totalelevationByDay', value)}
+                  value={formData.totalElevationByDay}
+                  onChange={(_, value) => handleInputChange('totalElevationByDay', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -457,8 +457,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl>
                 <FormLabel>Peak Altitude (feet)</FormLabel>
                 <NumberInput
-                  value={formData.peakaltitude}
-                  onChange={(_, value) => handleInputChange('peakaltitude', value)}
+                  value={formData.peakAltitude}
+                  onChange={(_, value) => handleInputChange('peakAltitude', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -637,7 +637,7 @@ const CalorieCalculator: React.FC = () => {
                   <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                     <Box>
                       <Text><strong>Distance:</strong> {parseFloat(formData.trailDistance).toFixed(1)} miles</Text>
-                      <Text><strong>Elevation Gain:</strong> {formData.totalelevation} ft</Text>
+                      <Text><strong>Elevation Gain:</strong> {formData.totalElevation} ft</Text>
                       <Text><strong>Season:</strong> {formData.season}</Text>
                     </Box>
                     <Box>

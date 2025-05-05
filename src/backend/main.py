@@ -36,19 +36,19 @@ async def calculate_calories(
     # Trip Details (Required)
     tripDuration: int = Query(..., description="Duration in days"),
     trailDistance: float = Query(..., description="Total trail distance in miles"),
-    totalelevation: int = Query(..., description="Total elevation gain in feet"),
+    totalElevation: int = Query(..., description="Total elevation gain in feet"),
     season: str = Query(..., description="Season (spring, summer, fall, winter)"),
     
     # Trip Details Breakdown (Optional)
     day: Optional[int] = Query(None, description="Day number"),
     trailDistanceByDay: Optional[float] = Query(None, description="Daily trail distance in miles"),
-    totalelevationByDay: Optional[int] = Query(None, description="Daily elevation gain in feet"),
+    totalElevationByDay: Optional[int] = Query(None, description="Daily elevation gain in feet"),
     
     # Environmental Factors (Optional)
     averageTemperature: Optional[float] = Query(None, description="Average temperature in Fahrenheit"),
     minTemperature: Optional[float] = Query(None, description="Minimum temperature in Fahrenheit"),
     maxTemperature: Optional[float] = Query(None, description="Maximum temperature in Fahrenheit"),
-    peakaltitude: Optional[int] = Query(None, description="Peak altitude in feet"),
+    peakAltitude: Optional[int] = Query(None, description="Peak altitude in feet"),
     precipitationChance: Optional[int] = Query(None, description="Precipitation chance percentage"),
     
     # Pack Weight (Optional)
@@ -67,15 +67,15 @@ async def calculate_calories(
         "activityLevel": activityLevel,
         "tripDuration": tripDuration,
         "trailDistance": trailDistance,
-        "totalelevation": totalelevation,
+        "totalElevation": totalElevation,
         "season": season,
         "day": day,
         "trailDistanceByDay": trailDistanceByDay,
-        "totalelevationByDay": totalelevationByDay,
+        "totalElevationByDay": totalElevationByDay,
         "averageTemperature": averageTemperature,
         "minTemperature": minTemperature,
         "maxTemperature": maxTemperature,
-        "peakaltitude": peakaltitude,
+        "peakAltitude": peakAltitude,
         "precipitationChance": precipitationChance,
         "baseWeight": baseWeight,
         "waterWeight": waterWeight,

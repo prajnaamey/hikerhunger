@@ -52,19 +52,19 @@ class CalorieCalculationInput(TypedDict, total=False):
     # Trip Details (Required)
     tripDuration: int
     trailDistance: float
-    totalelevation: int
+    totalElevation: int
     season: Season
     
     # Trip Details Breakdown (Optional)
     day: Optional[int]
     trailDistanceByDay: Optional[Union[float, List[float]]]
-    totalelevationByDay: Optional[Union[int, List[int]]]
+    totalElevationByDay: Optional[Union[int, List[int]]]
     
     # Environmental Factors (Optional)
     averageTemperature: Optional[float]
     minTemperature: Optional[float]
     maxTemperature: Optional[float]
-    peakaltitude: Optional[int]
+    peakAltitude: Optional[int]
     precipitationChance: Optional[int]
     
     # Pack Weight (Optional)
