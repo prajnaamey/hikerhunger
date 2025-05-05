@@ -92,17 +92,30 @@ const CalorieCalculator: React.FC = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [calculationResult, setCalculationResult] = useState<CalorieResponse | null>(null);
+
+  // Define default values for the form
+  const defaultFormData: FormData = {
+    weight: 160,
+    height: 70,
+    age: 33,
+    gender: 'male',
+    activityLevel: 'moderately_active',
+    tripDuration: 3,
+    trailDistance: 34,
+    totalelevation: 5000,
+    season: 'summer',
+  };
+
   const [formData, setFormData] = useState<FormData>({
-    weight: 0,
-    height: 0,
-    age: 0,
-    gender: '',
-    activityLevel: '',
-    tripDuration: 0,
-    trailDistance: 0,
-    totalelevation: 0,
-    season: '',
+    ...defaultFormData
   });
+
+  // Function to check if form is unchanged
+  const isFormUnchanged = () => {
+    return Object.keys(defaultFormData).every(
+      key => formData[key as keyof FormData] === defaultFormData[key as keyof FormData]
+    );
+  };
 
   const handleInputChange = (field: keyof FormData, value: string | number) => {
     setFormData(prev => ({
@@ -240,6 +253,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.gender}
                   onChange={(e) => handleInputChange('gender', e.target.value)}
+                  placeholder="Male"
                 >
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
@@ -255,6 +269,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.activityLevel}
                   onChange={(e) => handleInputChange('activityLevel', e.target.value)}
+                  placeholder="Moderately Active"
                 >
                   <option value="">Select activity level</option>
                   <option value="sedentary">Sedentary</option>
@@ -325,6 +340,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.season}
                   onChange={(e) => handleInputChange('season', e.target.value)}
+                  placeholder="Summer"
                 >
                   <option value="">Select season</option>
                   <option value="spring">Spring</option>
@@ -497,6 +513,7 @@ const CalorieCalculator: React.FC = () => {
               colorScheme="brand"
               size="lg"
               px={8}
+              disabled={isFormUnchanged()}
             >
               Calculate Calories
             </Button>
