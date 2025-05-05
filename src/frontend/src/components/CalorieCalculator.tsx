@@ -43,7 +43,8 @@ import { useNavigate } from 'react-router-dom';
 interface FormData {
   // User Biometrics
   weight: number;
-  height: number;
+  heightFeet: number;
+  heightInches: number;
   age: number;
   gender: string;
   activityLevel: string;
@@ -96,7 +97,8 @@ const CalorieCalculator: React.FC = () => {
   // Define default values for the form
   const defaultFormData: FormData = {
     weight: 160,
-    height: 70,
+    heightFeet: 5,
+    heightInches: 10,
     age: 33,
     gender: 'male',
     activityLevel: 'moderately_active',
@@ -127,12 +129,10 @@ const CalorieCalculator: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Convert form data to query parameters
       const queryParams = new URLSearchParams();
-      
-      // Required fields
       queryParams.append('weight', formData.weight.toString());
-      queryParams.append('height', formData.height.toString());
+      const height = (formData.heightFeet || 0) * 12 + (formData.heightInches || 0);
+      queryParams.append('height', height.toString());
       queryParams.append('age', formData.age.toString());
       queryParams.append('gender', formData.gender);
       queryParams.append('activityLevel', formData.activityLevel);
@@ -217,17 +217,35 @@ const CalorieCalculator: React.FC = () => {
 
             <GridItem>
               <FormControl isRequired>
-                <FormLabel>Height (inches)</FormLabel>
-                <NumberInput
-                  value={formData.height}
-                  onChange={(_, value) => handleInputChange('height', value)}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                <FormLabel>Height</FormLabel>
+                <Box display="flex" gap={2}>
+                  <NumberInput
+                    value={formData.heightFeet}
+                    min={0}
+                    max={8}
+                    onChange={(_, value) => handleInputChange('heightFeet', value)}
+                  >
+                    <NumberInputField placeholder="5" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <Text alignSelf="center">ft</Text>
+                  <NumberInput
+                    value={formData.heightInches}
+                    min={0}
+                    max={11}
+                    onChange={(_, value) => handleInputChange('heightInches', value)}
+                  >
+                    <NumberInputField placeholder="10" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <Text alignSelf="center">in</Text>
+                </Box>
               </FormControl>
             </GridItem>
 
