@@ -11,6 +11,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import QuickCalorieCalculator from './QuickCalorieCalculator';
 
 export interface LandingPageProps {}
 
@@ -34,8 +35,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
           </Heading>
           
           <Text fontSize="xl" color={textColor} maxW="2xl">
-            Calculate your perfect meal plan for your next hiking adventure. 
-            Get personalized calorie recommendations based on your trip details and personal metrics.
+            Built by two backpackers who got tired of clunky spreadsheets and overpacked backpacks. HikerHunger is our way of sharing the simple, smart meal planning tool we always wished we had—so you can spend less time calculating and more time on the trail.
           </Text>
 
           <HStack spacing={4}>
@@ -57,8 +57,9 @@ const LandingPage: React.FC<LandingPageProps> = () => {
               px={8}
               py={6}
               fontSize="lg"
+              onClick={() => navigate('/about')}
             >
-              Learn More
+              About
             </Button>
           </HStack>
 
@@ -75,17 +76,11 @@ const LandingPage: React.FC<LandingPageProps> = () => {
               objectFit="cover"
             />
           </Box>
-
-          <VStack spacing={6} mt={12} maxW="2xl">
-            <Heading size="lg">Why HikerHunger?</Heading>
-            <Text fontSize="lg" color={textColor}>
-              Our advanced algorithm takes into account your body metrics, trail conditions, 
-              and environmental factors to provide you with the most accurate calorie 
-              recommendations for your hiking trip.
-            </Text>
-          </VStack>
         </VStack>
       </Container>
+      <Box mt={12}>
+        <QuickCalorieCalculator />
+      </Box>
     </Box>
   );
 };

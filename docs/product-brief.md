@@ -6,7 +6,7 @@ An app that calculates calories and meal recommendations for hikers based on:
 - User biometrics (height, weight, gender)
 
 ## Why We're Building This
-When my husband and I got into backpacking, we carried whatever food we wanted. However, we quickly realized we always packed more than needed. And when you're backpacking, even an extra pound can feel like ten!
+When we (Prajna and Sanath) got into backpacking, we carried whatever food we wanted. However, we quickly realized we always packed more than needed. And when you're backpacking, even an extra pound can feel like ten!
 
 After extensive research, we created a wizardry Excel sheet that calculates food requirements based on various inputs. Yet before every trip, we still spend countless hours hunched over this spreadsheet, calculating exactly how much and what food to pack.
 

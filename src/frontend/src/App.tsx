@@ -2,6 +2,7 @@ import React from 'react';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage, CalorieCalculator } from './components';
+import About from './components/About';
 
 const theme = extendTheme({
   colors: {
@@ -18,6 +19,10 @@ const theme = extendTheme({
       900: '#1c4532',
     },
   },
+  fonts: {
+    heading: `'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`,
+    body: `'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`,
+  },
 });
 
 function App() {
@@ -27,6 +32,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/calculate" element={<CalorieCalculator />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </ChakraProvider>
