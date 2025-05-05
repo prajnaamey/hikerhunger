@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Body
 from typing import Optional
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
 from .schemas import CalorieResponse
+from .schemas.meal import MealRecommendationRequest, MealRecommendationResponse
 
 app = FastAPI(
     title="HikerHunger API",
@@ -87,6 +88,18 @@ async def calculate_calories(
     
     # Convert TypedDict to Pydantic model
     return CalorieResponse(**result)
+
+@app.post("/v1/api/meal-recommendations", response_model=MealRecommendationResponse)
+async def get_meal_recommendations(request: MealRecommendationRequest):
+    # For now, just return the input parameters
+    return MealRecommendationResponse(
+        totalCalories=request.totalCalories,
+        totalCarbohydratesCalories=request.totalCarbohydratesCalories,
+        totalProteinCalories=request.totalProteinCalories,
+        totalFatCalories=request.totalFatCalories,
+        dailyRequirements=request.dailyRequirements,
+        tripDuration=request.tripDuration
+    )
 
 if __name__ == "__main__":
     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True) 
