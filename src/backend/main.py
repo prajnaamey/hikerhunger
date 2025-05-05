@@ -27,7 +27,7 @@ async def root():
 @app.get("/v1/api/calculate-calories", response_model=CalorieResponse)
 async def calculate_calories(
     # User Biometrics (Required)
-    weight: int = Query(..., description="Weight in lbs"),
+    weight: float = Query(..., description="Weight in lbs"),
     height: int = Query(..., description="Height in inches"),
     age: int = Query(..., description="Age in years"),
     gender: str = Query(..., description="Gender (male, female, other)"),

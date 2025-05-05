@@ -43,7 +43,7 @@ class CalorieCalculationResult(TypedDict):
 
 class CalorieCalculationInput(TypedDict, total=False):
     # User Biometrics (Required)
-    weight: int
+    weight: float
     height: int
     age: int
     gender: Gender

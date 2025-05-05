@@ -42,7 +42,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   // User Biometrics
-  weight: number;
+  weight: string;
   heightFeet: number;
   heightInches: number;
   age: number;
@@ -64,8 +64,8 @@ interface FormData {
   maxTemperature?: number;
   peakaltitude?: number;
   precipitationChance?: number;
-  baseWeight?: number;
-  waterWeight?: number;
+  baseWeight?: string;
+  waterWeight?: string;
   hikerExperience?: string;
 }
 
@@ -96,16 +96,18 @@ const CalorieCalculator: React.FC = () => {
 
   // Define default values for the form
   const defaultFormData: FormData = {
-    weight: 160,
+    weight: "160.0",
     heightFeet: 5,
     heightInches: 10,
     age: 33,
     gender: 'male',
     activityLevel: 'moderately_active',
     tripDuration: 3,
-    trailDistance: "34.00",
+    trailDistance: "34.0",
     totalelevation: 5000,
     season: 'summer',
+    baseWeight: "0.0",
+    waterWeight: "0.0",
   };
 
   const [formData, setFormData] = useState<FormData>({
@@ -120,7 +122,7 @@ const CalorieCalculator: React.FC = () => {
   };
 
   const handleInputChange = (field: keyof FormData, value: string | number) => {
-    if (field === 'trailDistance' || field === 'trailDistanceByDay') {
+    if (field === 'trailDistance' || field === 'trailDistanceByDay' || field === 'weight' || field === 'baseWeight' || field === 'waterWeight') {
       setFormData(prev => ({
         ...prev,
         [field]: value as string
@@ -137,7 +139,7 @@ const CalorieCalculator: React.FC = () => {
     e.preventDefault();
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('weight', formData.weight.toString());
+      queryParams.append('weight', parseFloat(formData.weight).toString());
       const height = (formData.heightFeet || 0) * 12 + (formData.heightInches || 0);
       queryParams.append('height', height.toString());
       queryParams.append('age', formData.age.toString());
@@ -157,8 +159,8 @@ const CalorieCalculator: React.FC = () => {
       if (formData.maxTemperature) queryParams.append('maxTemperature', formData.maxTemperature.toString());
       if (formData.peakaltitude) queryParams.append('peakaltitude', formData.peakaltitude.toString());
       if (formData.precipitationChance) queryParams.append('precipitationChance', formData.precipitationChance.toString());
-      if (formData.baseWeight) queryParams.append('baseWeight', formData.baseWeight.toString());
-      if (formData.waterWeight) queryParams.append('waterWeight', formData.waterWeight.toString());
+      if (formData.baseWeight) queryParams.append('baseWeight', parseFloat(formData.baseWeight).toString());
+      if (formData.waterWeight) queryParams.append('waterWeight', parseFloat(formData.waterWeight).toString());
       if (formData.hikerExperience) queryParams.append('hikerExperience', formData.hikerExperience);
 
       const response = await fetch(`http://localhost:8000/v1/api/calculate-calories?${queryParams.toString()}`, {
@@ -211,7 +213,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.weight}
-                  onChange={(_, value) => handleInputChange('weight', value)}
+                  onChange={(valueString) => handleInputChange('weight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -333,8 +337,8 @@ const CalorieCalculator: React.FC = () => {
                 <NumberInput
                   value={formData.trailDistance}
                   onChange={(valueString) => handleInputChange('trailDistance', valueString)}
-                  step={0.01}
-                  precision={2}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -405,8 +409,8 @@ const CalorieCalculator: React.FC = () => {
                 <NumberInput
                   value={formData.trailDistanceByDay}
                   onChange={(valueString) => handleInputChange('trailDistanceByDay', valueString)}
-                  step={0.01}
-                  precision={2}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -486,7 +490,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Base Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.baseWeight}
-                  onChange={(_, value) => handleInputChange('baseWeight', value)}
+                  onChange={(valueString) => handleInputChange('baseWeight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -502,7 +508,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Water Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.waterWeight}
-                  onChange={(_, value) => handleInputChange('waterWeight', value)}
+                  onChange={(valueString) => handleInputChange('waterWeight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -628,13 +636,13 @@ const CalorieCalculator: React.FC = () => {
                   <Heading size="md" mb={4}>Trip Details</Heading>
                   <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                     <Box>
-                      <Text><strong>Distance:</strong> {parseFloat(formData.trailDistance).toFixed(2)} miles</Text>
+                      <Text><strong>Distance:</strong> {parseFloat(formData.trailDistance).toFixed(1)} miles</Text>
                       <Text><strong>Elevation Gain:</strong> {formData.totalelevation} ft</Text>
                       <Text><strong>Season:</strong> {formData.season}</Text>
                     </Box>
                     <Box>
-                      <Text><strong>Pack Weight:</strong> {formData.baseWeight || 0} lbs</Text>
-                      <Text><strong>Water Weight:</strong> {formData.waterWeight || 0} lbs</Text>
+                      <Text><strong>Pack Weight:</strong> {formData.baseWeight ? parseFloat(formData.baseWeight).toFixed(1) : '0.0'} lbs</Text>
+                      <Text><strong>Water Weight:</strong> {formData.waterWeight ? parseFloat(formData.waterWeight).toFixed(1) : '0.0'} lbs</Text>
                       <Text><strong>Experience:</strong> {formData.hikerExperience || 'Not specified'}</Text>
                     </Box>
                   </Grid>

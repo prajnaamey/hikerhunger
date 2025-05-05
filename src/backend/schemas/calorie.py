@@ -23,7 +23,7 @@ class CalorieResponse(BaseModel):
 class CalorieCalculationParams(BaseModel):
     """Input parameters for calorie calculation"""
     # User Biometrics (Required)
-    weight: int
+    weight: float
     height: int
     age: int
     gender: str
