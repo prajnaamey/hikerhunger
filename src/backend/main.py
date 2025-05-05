@@ -1,12 +1,22 @@
 from fastapi import FastAPI, Query
 from typing import Optional
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
 
 app = FastAPI(
     title="HikerHunger API",
     description="Backend API for HikerHunger - A calorie calculator for hikers",
     version="1.0.0"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React app's origin
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 @app.get("/")
