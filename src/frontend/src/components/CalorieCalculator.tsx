@@ -51,13 +51,13 @@ interface FormData {
   
   // Trip Details
   tripDuration: number;
-  trailDistance: number;
+  trailDistance: string;
   totalelevation: number;
   season: string;
   
   // Optional Fields
   day?: number;
-  trailDistanceByDay?: number;
+  trailDistanceByDay?: string;
   totalelevationByDay?: number;
   averageTemperature?: number;
   minTemperature?: number;
@@ -103,7 +103,7 @@ const CalorieCalculator: React.FC = () => {
     gender: 'male',
     activityLevel: 'moderately_active',
     tripDuration: 3,
-    trailDistance: 34,
+    trailDistance: "34.00",
     totalelevation: 5000,
     season: 'summer',
   };
@@ -120,10 +120,17 @@ const CalorieCalculator: React.FC = () => {
   };
 
   const handleInputChange = (field: keyof FormData, value: string | number) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    if (field === 'trailDistance' || field === 'trailDistanceByDay') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value as string
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -137,13 +144,13 @@ const CalorieCalculator: React.FC = () => {
       queryParams.append('gender', formData.gender);
       queryParams.append('activityLevel', formData.activityLevel);
       queryParams.append('tripDuration', formData.tripDuration.toString());
-      queryParams.append('trailDistance', formData.trailDistance.toString());
+      queryParams.append('trailDistance', parseFloat(formData.trailDistance).toString());
       queryParams.append('totalelevation', formData.totalelevation.toString());
       queryParams.append('season', formData.season);
 
       // Optional fields - only append if they have values
       if (formData.day) queryParams.append('day', formData.day.toString());
-      if (formData.trailDistanceByDay) queryParams.append('trailDistanceByDay', formData.trailDistanceByDay.toString());
+      if (formData.trailDistanceByDay) queryParams.append('trailDistanceByDay', parseFloat(formData.trailDistanceByDay).toString());
       if (formData.totalelevationByDay) queryParams.append('totalelevationByDay', formData.totalelevationByDay.toString());
       if (formData.averageTemperature) queryParams.append('averageTemperature', formData.averageTemperature.toString());
       if (formData.minTemperature) queryParams.append('minTemperature', formData.minTemperature.toString());
@@ -325,7 +332,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Trail Distance (miles)</FormLabel>
                 <NumberInput
                   value={formData.trailDistance}
-                  onChange={(_, value) => handleInputChange('trailDistance', value)}
+                  onChange={(valueString) => handleInputChange('trailDistance', valueString)}
+                  step={0.01}
+                  precision={2}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -395,7 +404,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Daily Trail Distance (miles)</FormLabel>
                 <NumberInput
                   value={formData.trailDistanceByDay}
-                  onChange={(_, value) => handleInputChange('trailDistanceByDay', value)}
+                  onChange={(valueString) => handleInputChange('trailDistanceByDay', valueString)}
+                  step={0.01}
+                  precision={2}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -617,7 +628,7 @@ const CalorieCalculator: React.FC = () => {
                   <Heading size="md" mb={4}>Trip Details</Heading>
                   <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                     <Box>
-                      <Text><strong>Distance:</strong> {formData.trailDistance} miles</Text>
+                      <Text><strong>Distance:</strong> {parseFloat(formData.trailDistance).toFixed(2)} miles</Text>
                       <Text><strong>Elevation Gain:</strong> {formData.totalelevation} ft</Text>
                       <Text><strong>Season:</strong> {formData.season}</Text>
                     </Box>
