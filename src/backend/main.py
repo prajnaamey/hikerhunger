@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .services.calorie_calculator import calculate_hiking_calories
 from .schemas import CalorieResponse
 from .schemas.meal import MealRecommendationRequest, MealRecommendationResponse
+from .utils.helpers import parse_csv_param
 
 app = FastAPI(
     title="HikerHunger API",
@@ -42,8 +43,8 @@ async def calculate_calories(
     
     # Trip Details Breakdown (Optional)
     day: Optional[int] = Query(None, description="Day number"),
-    trailDistanceByDay: Optional[float] = Query(None, description="Daily trail distance in miles"),
-    totalElevationByDay: Optional[int] = Query(None, description="Daily elevation gain in feet"),
+    trailDistanceByDay: Optional[str] = Query(None, description="Daily trail distance in miles (CSV)"),
+    totalElevationByDay: Optional[str] = Query(None, description="Daily elevation gain in feet (CSV)"),
     
     # Environmental Factors (Optional)
     averageTemperature: Optional[float] = Query(None, description="Average temperature in Fahrenheit"),
@@ -71,8 +72,8 @@ async def calculate_calories(
         "totalElevation": totalElevation,
         "season": season,
         "day": day,
-        "trailDistanceByDay": trailDistanceByDay,
-        "totalElevationByDay": totalElevationByDay,
+        "trailDistanceByDay": parse_csv_param(trailDistanceByDay, float),
+        "totalElevationByDay": parse_csv_param(totalElevationByDay, int),
         "averageTemperature": averageTemperature,
         "minTemperature": minTemperature,
         "maxTemperature": maxTemperature,
