@@ -42,29 +42,30 @@ import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   // User Biometrics
-  weight: number;
-  height: number;
+  weight: string;
+  heightFeet: number;
+  heightInches: number;
   age: number;
   gender: string;
   activityLevel: string;
   
   // Trip Details
   tripDuration: number;
-  trailDistance: number;
-  totalelevation: number;
+  trailDistance: string;
+  totalElevation: number;
   season: string;
   
   // Optional Fields
   day?: number;
-  trailDistanceByDay?: number;
-  totalelevationByDay?: number;
+  trailDistanceByDay?: string;
+  totalElevationByDay?: number;
   averageTemperature?: number;
   minTemperature?: number;
   maxTemperature?: number;
-  peakaltitude?: number;
+  peakAltitude?: number;
   precipitationChance?: number;
-  baseWeight?: number;
-  waterWeight?: number;
+  baseWeight?: string;
+  waterWeight?: string;
   hikerExperience?: string;
 }
 
@@ -82,12 +83,9 @@ interface DayBreakdown {
 }
 
 interface CalorieResponse {
-  total_calories: {
-    daily_breakdown: DayBreakdown[];
-    total_calories: number;
-    total_macros: MacroData;
-  };
-  input_parameters: FormData;
+  daily_breakdown: DayBreakdown[];
+  total_calories: number;
+  total_macros: MacroData;
 }
 
 const CalorieCalculator: React.FC = () => {
@@ -95,53 +93,74 @@ const CalorieCalculator: React.FC = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [calculationResult, setCalculationResult] = useState<CalorieResponse | null>(null);
+
+  // Define default values for the form
+  const defaultFormData: FormData = {
+    weight: "160.0",
+    heightFeet: 5,
+    heightInches: 10,
+    age: 33,
+    gender: 'male',
+    activityLevel: 'moderately_active',
+    tripDuration: 3,
+    trailDistance: "34.0",
+    totalElevation: 5000,
+    season: 'summer',
+    baseWeight: "0.0",
+    waterWeight: "0.0",
+  };
+
   const [formData, setFormData] = useState<FormData>({
-    weight: 0,
-    height: 0,
-    age: 0,
-    gender: '',
-    activityLevel: '',
-    tripDuration: 0,
-    trailDistance: 0,
-    totalelevation: 0,
-    season: '',
+    ...defaultFormData
   });
 
+  // Function to check if form is unchanged
+  const isFormUnchanged = () => {
+    return Object.keys(defaultFormData).every(
+      key => formData[key as keyof FormData] === defaultFormData[key as keyof FormData]
+    );
+  };
+
   const handleInputChange = (field: keyof FormData, value: string | number) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    if (field === 'trailDistance' || field === 'trailDistanceByDay' || field === 'weight' || field === 'baseWeight' || field === 'waterWeight') {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value as string
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Convert form data to query parameters
       const queryParams = new URLSearchParams();
-      
-      // Required fields
-      queryParams.append('weight', formData.weight.toString());
-      queryParams.append('height', formData.height.toString());
+      queryParams.append('weight', parseFloat(formData.weight).toString());
+      const height = (formData.heightFeet || 0) * 12 + (formData.heightInches || 0);
+      queryParams.append('height', height.toString());
       queryParams.append('age', formData.age.toString());
       queryParams.append('gender', formData.gender);
       queryParams.append('activityLevel', formData.activityLevel);
       queryParams.append('tripDuration', formData.tripDuration.toString());
-      queryParams.append('trailDistance', formData.trailDistance.toString());
-      queryParams.append('totalelevation', formData.totalelevation.toString());
+      queryParams.append('trailDistance', parseFloat(formData.trailDistance).toString());
+      queryParams.append('totalElevation', formData.totalElevation.toString());
       queryParams.append('season', formData.season);
 
       // Optional fields - only append if they have values
       if (formData.day) queryParams.append('day', formData.day.toString());
-      if (formData.trailDistanceByDay) queryParams.append('trailDistanceByDay', formData.trailDistanceByDay.toString());
-      if (formData.totalelevationByDay) queryParams.append('totalelevationByDay', formData.totalelevationByDay.toString());
+      if (formData.trailDistanceByDay) queryParams.append('trailDistanceByDay', parseFloat(formData.trailDistanceByDay).toString());
+      if (formData.totalElevationByDay) queryParams.append('totalElevationByDay', formData.totalElevationByDay.toString());
       if (formData.averageTemperature) queryParams.append('averageTemperature', formData.averageTemperature.toString());
       if (formData.minTemperature) queryParams.append('minTemperature', formData.minTemperature.toString());
       if (formData.maxTemperature) queryParams.append('maxTemperature', formData.maxTemperature.toString());
-      if (formData.peakaltitude) queryParams.append('peakaltitude', formData.peakaltitude.toString());
+      if (formData.peakAltitude) queryParams.append('peakAltitude', formData.peakAltitude.toString());
       if (formData.precipitationChance) queryParams.append('precipitationChance', formData.precipitationChance.toString());
-      if (formData.baseWeight) queryParams.append('baseWeight', formData.baseWeight.toString());
-      if (formData.waterWeight) queryParams.append('waterWeight', formData.waterWeight.toString());
+      if (formData.baseWeight) queryParams.append('baseWeight', parseFloat(formData.baseWeight).toString());
+      if (formData.waterWeight) queryParams.append('waterWeight', parseFloat(formData.waterWeight).toString());
       if (formData.hikerExperience) queryParams.append('hikerExperience', formData.hikerExperience);
 
       const response = await fetch(`http://localhost:8000/v1/api/calculate-calories?${queryParams.toString()}`, {
@@ -194,7 +213,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.weight}
-                  onChange={(_, value) => handleInputChange('weight', value)}
+                  onChange={(valueString) => handleInputChange('weight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -207,17 +228,35 @@ const CalorieCalculator: React.FC = () => {
 
             <GridItem>
               <FormControl isRequired>
-                <FormLabel>Height (inches)</FormLabel>
-                <NumberInput
-                  value={formData.height}
-                  onChange={(_, value) => handleInputChange('height', value)}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                <FormLabel>Height</FormLabel>
+                <Box display="flex" gap={2}>
+                  <NumberInput
+                    value={formData.heightFeet}
+                    min={0}
+                    max={8}
+                    onChange={(_, value) => handleInputChange('heightFeet', value)}
+                  >
+                    <NumberInputField placeholder="5" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <Text alignSelf="center">ft</Text>
+                  <NumberInput
+                    value={formData.heightInches}
+                    min={0}
+                    max={11}
+                    onChange={(_, value) => handleInputChange('heightInches', value)}
+                  >
+                    <NumberInputField placeholder="10" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <Text alignSelf="center">in</Text>
+                </Box>
               </FormControl>
             </GridItem>
 
@@ -243,6 +282,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.gender}
                   onChange={(e) => handleInputChange('gender', e.target.value)}
+                  placeholder="Male"
                 >
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
@@ -258,6 +298,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.activityLevel}
                   onChange={(e) => handleInputChange('activityLevel', e.target.value)}
+                  placeholder="Moderately Active"
                 >
                   <option value="">Select activity level</option>
                   <option value="sedentary">Sedentary</option>
@@ -295,7 +336,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Trail Distance (miles)</FormLabel>
                 <NumberInput
                   value={formData.trailDistance}
-                  onChange={(_, value) => handleInputChange('trailDistance', value)}
+                  onChange={(valueString) => handleInputChange('trailDistance', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -310,8 +353,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl isRequired>
                 <FormLabel>Total Elevation (feet)</FormLabel>
                 <NumberInput
-                  value={formData.totalelevation}
-                  onChange={(_, value) => handleInputChange('totalelevation', value)}
+                  value={formData.totalElevation}
+                  onChange={(_, value) => handleInputChange('totalElevation', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -328,6 +371,7 @@ const CalorieCalculator: React.FC = () => {
                 <Select
                   value={formData.season}
                   onChange={(e) => handleInputChange('season', e.target.value)}
+                  placeholder="Summer"
                 >
                   <option value="">Select season</option>
                   <option value="spring">Spring</option>
@@ -364,7 +408,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Daily Trail Distance (miles)</FormLabel>
                 <NumberInput
                   value={formData.trailDistanceByDay}
-                  onChange={(_, value) => handleInputChange('trailDistanceByDay', value)}
+                  onChange={(valueString) => handleInputChange('trailDistanceByDay', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -379,8 +425,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl>
                 <FormLabel>Daily Elevation Gain (feet)</FormLabel>
                 <NumberInput
-                  value={formData.totalelevationByDay}
-                  onChange={(_, value) => handleInputChange('totalelevationByDay', value)}
+                  value={formData.totalElevationByDay}
+                  onChange={(_, value) => handleInputChange('totalElevationByDay', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -411,8 +457,8 @@ const CalorieCalculator: React.FC = () => {
               <FormControl>
                 <FormLabel>Peak Altitude (feet)</FormLabel>
                 <NumberInput
-                  value={formData.peakaltitude}
-                  onChange={(_, value) => handleInputChange('peakaltitude', value)}
+                  value={formData.peakAltitude}
+                  onChange={(_, value) => handleInputChange('peakAltitude', value)}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -444,7 +490,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Base Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.baseWeight}
-                  onChange={(_, value) => handleInputChange('baseWeight', value)}
+                  onChange={(valueString) => handleInputChange('baseWeight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -460,7 +508,9 @@ const CalorieCalculator: React.FC = () => {
                 <FormLabel>Water Weight (lbs)</FormLabel>
                 <NumberInput
                   value={formData.waterWeight}
-                  onChange={(_, value) => handleInputChange('waterWeight', value)}
+                  onChange={(valueString) => handleInputChange('waterWeight', valueString)}
+                  step={0.1}
+                  precision={1}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -500,6 +550,7 @@ const CalorieCalculator: React.FC = () => {
               colorScheme="brand"
               size="lg"
               px={8}
+              disabled={isFormUnchanged()}
             >
               Calculate Calories
             </Button>
@@ -521,11 +572,7 @@ const CalorieCalculator: React.FC = () => {
                   <StatGroup>
                     <Stat>
                       <StatLabel>Total Calories</StatLabel>
-                      <StatNumber>{formatNumber(calculationResult.total_calories.total_calories)}</StatNumber>
-                    </Stat>
-                    <Stat>
-                      <StatLabel>Total Days</StatLabel>
-                      <StatNumber>{calculationResult.total_calories.daily_breakdown.length}</StatNumber>
+                      <StatNumber>{formatNumber(calculationResult.total_calories)}</StatNumber>
                     </Stat>
                   </StatGroup>
                 </Box>
@@ -537,19 +584,19 @@ const CalorieCalculator: React.FC = () => {
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="green.50">
                       <Stat>
                         <StatLabel>Carbs (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.carbs)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.carbs)}</StatNumber>
                       </Stat>
                     </Box>
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="yellow.50">
                       <Stat>
                         <StatLabel>Fat (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.fat)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.fat)}</StatNumber>
                       </Stat>
                     </Box>
                     <Box p={4} borderWidth={1} borderRadius="lg" bg="red.50">
                       <Stat>
                         <StatLabel>Protein (g)</StatLabel>
-                        <StatNumber>{formatNumber(calculationResult.total_calories.total_macros.protein)}</StatNumber>
+                        <StatNumber>{formatNumber(calculationResult.total_macros.protein)}</StatNumber>
                       </Stat>
                     </Box>
                   </Grid>
@@ -570,7 +617,7 @@ const CalorieCalculator: React.FC = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {calculationResult.total_calories.daily_breakdown.map((day) => (
+                      {calculationResult.daily_breakdown.map((day) => (
                         <Tr key={day.day}>
                           <Td>{day.day}</Td>
                           <Td>{formatNumber(day.calories)}</Td>
@@ -589,14 +636,14 @@ const CalorieCalculator: React.FC = () => {
                   <Heading size="md" mb={4}>Trip Details</Heading>
                   <Grid templateColumns="repeat(2, 1fr)" gap={4}>
                     <Box>
-                      <Text><strong>Distance:</strong> {calculationResult.input_parameters.trailDistance} miles</Text>
-                      <Text><strong>Elevation Gain:</strong> {calculationResult.input_parameters.totalelevation} ft</Text>
-                      <Text><strong>Season:</strong> {calculationResult.input_parameters.season}</Text>
+                      <Text><strong>Distance:</strong> {parseFloat(formData.trailDistance).toFixed(1)} miles</Text>
+                      <Text><strong>Elevation Gain:</strong> {formData.totalElevation} ft</Text>
+                      <Text><strong>Season:</strong> {formData.season}</Text>
                     </Box>
                     <Box>
-                      <Text><strong>Pack Weight:</strong> {calculationResult.input_parameters.baseWeight} lbs</Text>
-                      <Text><strong>Water Weight:</strong> {calculationResult.input_parameters.waterWeight} lbs</Text>
-                      <Text><strong>Experience:</strong> {calculationResult.input_parameters.hikerExperience}</Text>
+                      <Text><strong>Pack Weight:</strong> {formData.baseWeight ? parseFloat(formData.baseWeight).toFixed(1) : '0.0'} lbs</Text>
+                      <Text><strong>Water Weight:</strong> {formData.waterWeight ? parseFloat(formData.waterWeight).toFixed(1) : '0.0'} lbs</Text>
+                      <Text><strong>Experience:</strong> {formData.hikerExperience || 'Not specified'}</Text>
                     </Box>
                   </Grid>
                 </Box>

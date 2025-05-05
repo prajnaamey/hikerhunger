@@ -1,4 +1,16 @@
-def calculate_us_pandolf_calories(weight_lbs, load_lbs, speed_mph, grade, terrain_factor, hours):
+from typing import List, Union
+from .types import (
+    CalorieCalculationInput,
+    CalorieCalculationResult,
+    MacroBreakdown,
+    DailyBreakdown,
+    Gender,
+    ActivityLevel,
+    Season,
+    HikerExperience
+)
+
+def calculate_us_pandolf_calories(weight_lbs: float, load_lbs: float, speed_mph: float, grade: float, terrain_factor: float, hours: float) -> float:
     """
     Calculate energy expenditure using a US unit adaptation of the Pandolf equation
     
@@ -46,36 +58,36 @@ def calculate_us_pandolf_calories(weight_lbs, load_lbs, speed_mph, grade, terrai
     
     return total_calories
 
-def hiking_hours_calculator(params, day):
+def hiking_hours_calculator(params: CalorieCalculationInput, day: int) -> float:
     """Calculate expected hiking hours for a given day based on distance and elevation"""
     if isinstance(params.get("trailDistanceByDay"), list):
         distance = params["trailDistanceByDay"][day-1]
     else:
         distance = params["trailDistance"] / params["tripDuration"]
         
-    if isinstance(params.get("totalelevationByDay"), list):
-        elevation = params["totalelevationByDay"][day-1]
+    if isinstance(params.get("totalElevationByDay"), list):
+        elevation = params["totalElevationByDay"][day-1]
     else:
-        elevation = params["totalelevation"] / params["tripDuration"]
+        elevation = params["totalElevation"] / params["tripDuration"]
     
     # Using modified Naismith's Rule: 3mph on flat, +1 hour per 2000ft climb
     return distance / 3 + (elevation / 2000)
 
-def calculate_daily_calories(params, day):
+def calculate_daily_calories(params: CalorieCalculationInput, day: int) -> int:
     """Calculate daily calorie requirements for a specific day of the trip"""
     # 1. Calculate Basal Metabolic Rate (BMR)
-    if params["gender"].lower() == "male":
+    if params["gender"] == Gender.MALE:
         bmr = (4.536 * params["weight"]) + (15.88 * params["height"]) - (5 * params["age"]) + 5
     else:
         bmr = (4.536 * params["weight"]) + (15.88 * params["height"]) - (5 * params["age"]) - 161
     
     # 2. Activity factor for non-hiking baseline
     activity_factors = {
-        "sedentary": 1.2,
-        "lightly_active": 1.375,
-        "moderately_active": 1.55,
-        "very_active": 1.725,
-        "extra_active": 1.9
+        ActivityLevel.SEDENTARY: 1.2,
+        ActivityLevel.LIGHTLY_ACTIVE: 1.375,
+        ActivityLevel.MODERATELY_ACTIVE: 1.55,
+        ActivityLevel.VERY_ACTIVE: 1.725,
+        ActivityLevel.EXTRA_ACTIVE: 1.9
     }
     base_calories = bmr * activity_factors[params["activityLevel"]]
     
@@ -89,10 +101,10 @@ def calculate_daily_calories(params, day):
             fatigue_factor = min(1.0 + (day - 1) * 0.02, 1.1)
             distance *= fatigue_factor
             
-    if isinstance(params.get("totalelevationByDay"), list):
-        elevation = params["totalelevationByDay"][day-1]
+    if isinstance(params.get("totalElevationByDay"), list):
+        elevation = params["totalElevationByDay"][day-1]
     else:
-        elevation = params["totalelevation"] / params["tripDuration"]
+        elevation = params["totalElevation"] / params["tripDuration"]
     
     # 4. Calculate hiking duration
     hiking_hours = distance / 3 + (elevation / 2000)
@@ -104,10 +116,10 @@ def calculate_daily_calories(params, day):
     
     # 6. Apply terrain factor based on season
     terrain_factors = {
-        "winter": 1.3,
-        "fall": 1.1,
-        "summer": 1.05,
-        "spring": 1.15
+        Season.WINTER: 1.3,
+        Season.FALL: 1.1,
+        Season.SUMMER: 1.05,
+        Season.SPRING: 1.15
     }
     terrain_factor = terrain_factors.get(params["season"], 1.0)
     
@@ -148,16 +160,17 @@ def calculate_daily_calories(params, day):
     
     # Altitude adjustment
     altitude_factor = 1.0
-    if params.get("peakaltitude") and params["peakaltitude"] > 5000:
-        altitude_factor += (params["peakaltitude"] - 5000) / 3000 * 0.05
+    if params.get("peakAltitude") and params["peakAltitude"] > 5000:
+        altitude_factor += (params["peakAltitude"] - 5000) / 3000 * 0.05
     
     # Experience adjustment
-    experience_factor = {
-        "beginner": 1.1,
-        "intermediate": 1.0,
-        "advanced": 0.95,
-        "expert": 0.9
-    }.get(params.get("hikerExperience", "intermediate"), 1.0)
+    experience_factors = {
+        HikerExperience.BEGINNER: 1.1,
+        HikerExperience.INTERMEDIATE: 1.0,
+        HikerExperience.ADVANCED: 0.95,
+        HikerExperience.EXPERT: 0.9
+    }
+    experience_factor = experience_factors.get(params.get("hikerExperience", HikerExperience.INTERMEDIATE), 1.0)
     
     # 10. Calculate final hiking calories
     adjusted_hiking_calories = hiking_calories * temp_factor * altitude_factor * experience_factor
@@ -167,7 +180,7 @@ def calculate_daily_calories(params, day):
     
     return round(total_calories / 50) * 50  # Round to nearest 50
 
-def calculate_daily_macros(params, day):
+def calculate_daily_macros(params: CalorieCalculationInput, day: int) -> MacroBreakdown:
     """Calculate macronutrient breakdown for a specific day"""
     daily_calories = calculate_daily_calories(params, day)
     
@@ -192,14 +205,14 @@ def calculate_daily_macros(params, day):
         "protein": protein
     }
 
-def calculate_total_calories(params):
+def calculate_total_calories(params: CalorieCalculationInput) -> int:
     """Calculate total calories for the entire trip"""
     total = 0
     for day in range(1, params["tripDuration"] + 1):
         total += calculate_daily_calories(params, day)
     return total
 
-def calculate_total_macros(params):
+def calculate_total_macros(params: CalorieCalculationInput) -> MacroBreakdown:
     """Calculate total macros for the entire trip"""
     total_carbs = 0
     total_fat = 0
@@ -217,7 +230,7 @@ def calculate_total_macros(params):
         "protein": total_protein
     }
 
-def calculate_hiking_calories(params):
+def calculate_hiking_calories(params: CalorieCalculationInput) -> CalorieCalculationResult:
     """
     Main function to calculate calories and macros for the entire trip
     Returns a comprehensive breakdown of daily and total requirements
