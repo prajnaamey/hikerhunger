@@ -66,13 +66,15 @@ const LandingPage: React.FC = () => {
             </Button>
             <Button
               size="lg"
-              variant="outline"
+              colorScheme="teal"
+              variant="solid"
               px={8}
               py={6}
               fontSize="lg"
-              onClick={() => navigate('/about')}
+              fontWeight="bold"
+              onClick={() => navigate('/calculate')}
             >
-              About
+              Try Advanced Calculator
             </Button>
           </HStack>
         </VStack>
@@ -82,7 +84,22 @@ const LandingPage: React.FC = () => {
       <Box bg={bgColor} py={16} px={4}>
         <Container maxW="2xl">
           <QuickCalorieCalculator />
+          <VStack mt={8} spacing={4} align="center">
+            <Text color={textColor} fontSize="md" textAlign="center">
+              <strong>Quick Calculator:</strong> Great for getting started fast! Just enter a few details and get your calorie needs instantly.
+            </Text>
+            <Text color={textColor} fontSize="md" textAlign="center">
+              <strong>Need more control?</strong> The <Button variant="link" colorScheme="teal" onClick={() => navigate('/calculate')}>Advanced Calculator</Button> lets you fine-tune every aspect of your trip for the most accurate results.
+            </Text>
+          </VStack>
         </Container>
+      </Box>
+
+      {/* Footer */}
+      <Box as="footer" w="full" py={6} bg={useColorModeValue('gray.100', 'gray.900')} textAlign="center">
+        <Button variant="link" colorScheme="teal" fontSize="md" onClick={() => navigate('/about')}>
+          About
+        </Button>
       </Box>
     </Box>
   );
