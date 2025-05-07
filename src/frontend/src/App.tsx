@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage, CalorieCalculator } from './components';
 import About from './components/About';
 import { ThemeProvider } from './context/ThemeContext';
-import { ThemeToggle } from './components/ThemeToggle';
+import { Layout } from './components/Layout';
 
 const theme = extendTheme({
   colors: {
@@ -186,16 +186,13 @@ function App() {
       <ChakraProvider theme={theme}>
         <ThemeProvider>
           <Router>
-            <div style={{ position: 'relative', minHeight: '100vh' }}>
-              <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 50 }}>
-                <ThemeToggle />
-              </div>
+            <Layout>
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/calculate" element={<CalorieCalculator />} />
                 <Route path="/about" element={<About />} />
               </Routes>
-            </div>
+            </Layout>
           </Router>
         </ThemeProvider>
       </ChakraProvider>

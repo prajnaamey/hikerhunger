@@ -75,6 +75,7 @@ import {
   RepeatIcon,
   ViewIcon,
   AtSignIcon,
+  ArrowBackIcon,
 } from '@chakra-ui/icons';
 import {
   activityLevelTooltip,
