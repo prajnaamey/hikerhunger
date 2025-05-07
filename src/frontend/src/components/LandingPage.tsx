@@ -23,6 +23,10 @@ const HOW_IT_WORKS_BG_PINE = 'https://images.unsplash.com/photo-1483728642387-6c
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const bgColor = useColorModeValue('green.50', 'gray.800');
+  const textColor = useColorModeValue('gray.800', 'whiteAlpha.900');
+  const overlayColor = useColorModeValue('rgba(34,49,63,0.7)', 'rgba(0,0,0,0.8)');
+
   return (
     <Box>
       {/* Hero Section */}
@@ -32,7 +36,7 @@ const LandingPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bgImage={`linear-gradient(rgba(34,49,63,0.7),rgba(34,49,63,0.5)), url('${HERO_BG_HIKER}')`}
+        bgImage={`linear-gradient(${overlayColor},${overlayColor}), url('${HERO_BG_HIKER}')`}
         bgSize="cover"
         bgPosition="center"
         color="white"
@@ -49,7 +53,7 @@ const LandingPage: React.FC = () => {
           <HStack spacing={4} justify="center">
             <Button
               size="lg"
-              colorScheme="green"
+              colorScheme="brand"
               px={8}
               py={6}
               fontSize="lg"
@@ -63,7 +67,6 @@ const LandingPage: React.FC = () => {
             <Button
               size="lg"
               variant="outline"
-              colorScheme="green"
               px={8}
               py={6}
               fontSize="lg"
@@ -76,7 +79,7 @@ const LandingPage: React.FC = () => {
       </Box>
 
       {/* Quick Calculator Section */}
-      <Box bg="green.50" py={16} px={4}>
+      <Box bg={bgColor} py={16} px={4}>
         <Container maxW="2xl">
           <QuickCalorieCalculator />
         </Container>
