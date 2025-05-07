@@ -66,12 +66,15 @@ const theme = extendTheme({
         field: {
           bg: props.colorMode === 'dark' ? 'whiteAlpha.100' : 'white',
           borderColor: props.colorMode === 'dark' ? 'whiteAlpha.300' : 'gray.200',
+          transition: 'all 0.2s ease-in-out',
           _hover: {
             borderColor: props.colorMode === 'dark' ? 'whiteAlpha.400' : 'gray.300',
+            transform: 'translateY(-1px)',
           },
           _focus: {
             borderColor: 'brand.500',
-            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.500'}`,
+            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.500'}, 0 0 8px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.300'}`,
+            transform: 'translateY(-1px)',
           },
         },
       }),
@@ -81,12 +84,15 @@ const theme = extendTheme({
         field: {
           bg: props.colorMode === 'dark' ? 'whiteAlpha.100' : 'white',
           borderColor: props.colorMode === 'dark' ? 'whiteAlpha.300' : 'gray.200',
+          transition: 'all 0.2s ease-in-out',
           _hover: {
             borderColor: props.colorMode === 'dark' ? 'whiteAlpha.400' : 'gray.300',
+            transform: 'translateY(-1px)',
           },
           _focus: {
             borderColor: 'brand.500',
-            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.500'}`,
+            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.500'}, 0 0 8px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.300'}`,
+            transform: 'translateY(-1px)',
           },
         },
       }),
