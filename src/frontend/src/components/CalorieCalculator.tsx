@@ -91,6 +91,7 @@ import {
   waterWeightTooltip,
   hikerExperienceTooltip
 } from '../shared/tooltipContent';
+import { LabeledFormField } from '../shared/LabeledFormField';
 
 interface FormData {
   // User Biometrics
@@ -296,16 +297,12 @@ const CalorieCalculator: React.FC = () => {
         </GridItem>
         
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <EditIcon />
-                <Text>Weight (lbs)</Text>
-                <Tooltip label={weightTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Weight (lbs)"
+            tooltip={weightTooltip}
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <NumberInput
               value={formData.weight}
               onChange={(valueString) => handleInputChange('weight', valueString)}
@@ -318,20 +315,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <EditIcon />
-                <Text>Height</Text>
-                <Tooltip label={heightTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Height"
+            tooltip={heightTooltip}
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <Box display="flex" gap={2}>
               <NumberInput
                 value={formData.heightFeet}
@@ -360,17 +353,15 @@ const CalorieCalculator: React.FC = () => {
               </NumberInput>
               <Text alignSelf="center">in</Text>
             </Box>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <EditIcon />
-                <Text>Age (years)</Text>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Age (years)"
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <NumberInput
               value={formData.age}
               onChange={(_, value) => handleInputChange('age', value)}
@@ -381,20 +372,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <AtSignIcon />
-                <Text>Gender</Text>
-                <Tooltip label={genderTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Gender"
+            tooltip={genderTooltip}
+            isRequired
+            labelIcon={<AtSignIcon />}
+          >
             <Select
               value={formData.gender}
               onChange={(e) => handleInputChange('gender', e.target.value)}
@@ -405,32 +392,16 @@ const CalorieCalculator: React.FC = () => {
               <option value="female">Female</option>
               <option value="other">Other</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <HStack justify="space-between" align="center" mb={2}>
-              <FormLabel mb={0}>
-                <HStack spacing={2}>
-                  <RepeatIcon />
-                  <Text>Activity Level</Text>
-                </HStack>
-              </FormLabel>
-              <Tooltip 
-                label={activityLevelTooltip}
-                placement="top"
-                hasArrow
-              >
-                <IconButton
-                  aria-label="Help with activity level"
-                  icon={<InfoIcon />}
-                  size="sm"
-                  variant="ghost"
-                  colorScheme="brand"
-                />
-              </Tooltip>
-            </HStack>
+          <LabeledFormField
+            label="Activity Level"
+            tooltip={activityLevelTooltip}
+            isRequired
+            labelIcon={<RepeatIcon />}
+          >
             <Select
               value={formData.activityLevel}
               onChange={(e) => handleInputChange('activityLevel', e.target.value)}
@@ -443,7 +414,7 @@ const CalorieCalculator: React.FC = () => {
               <option value="very_active">Very Active</option>
               <option value="extra_active">Extra Active</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         {/* Trip Details */}
@@ -473,16 +444,12 @@ const CalorieCalculator: React.FC = () => {
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <TimeIcon />
-                <Text>Trail Distance (miles)</Text>
-                <Tooltip label={trailDistanceTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Trail Distance (miles)"
+            tooltip={trailDistanceTooltip}
+            isRequired
+            labelIcon={<TimeIcon />}
+          >
             <NumberInput
               value={formData.trailDistance}
               onChange={(valueString) => handleInputChange('trailDistance', valueString)}
@@ -495,20 +462,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <TriangleUpIcon />
-                <Text>Total Elevation (feet)</Text>
-                <Tooltip label={totalElevationTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Total Elevation (feet)"
+            tooltip={totalElevationTooltip}
+            isRequired
+            labelIcon={<TriangleUpIcon />}
+          >
             <NumberInput
               value={formData.totalElevation}
               onChange={(_, value) => handleInputChange('totalElevation', value)}
@@ -519,20 +482,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>
-              <HStack spacing={2}>
-                <SunIcon />
-                <Text>Season</Text>
-                <Tooltip label={seasonTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Season"
+            tooltip={seasonTooltip}
+            isRequired
+            labelIcon={<SunIcon />}
+          >
             <Select
               value={formData.season}
               onChange={(e) => handleInputChange('season', e.target.value)}
@@ -544,7 +503,7 @@ const CalorieCalculator: React.FC = () => {
               <option value="fall">Fall</option>
               <option value="winter">Winter</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
       </Grid>
       <Box mt={8} display="flex" justifyContent="flex-end" gap={4}>
@@ -562,16 +521,11 @@ const CalorieCalculator: React.FC = () => {
       <Box mb={8}>
         <Heading size="sm" mb={4}>Environmental & Pack Details</Heading>
         <VStack spacing={4} align="stretch">
-          <FormControl>
-            <FormLabel>
-              <HStack spacing={2}>
-                <ViewIcon />
-                <Text>Average Temperature (°F)</Text>
-                <Tooltip label={averageTemperatureTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Average Temperature (°F)"
+            tooltip={averageTemperatureTooltip}
+            labelIcon={<ViewIcon />}
+          >
             <NumberInput
               value={formData.averageTemperature}
               onChange={(_: string, value: number) => handleInputChange('averageTemperature', value)}
@@ -582,18 +536,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
 
-          <FormControl>
-            <FormLabel>
-              <HStack spacing={2}>
-                <ArrowUpIcon />
-                <Text>Precipitation Chance (%)</Text>
-                <Tooltip label={precipitationChanceTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Precipitation Chance (%)"
+            tooltip={precipitationChanceTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.precipitationChance}
               onChange={(_: string, value: number) => handleInputChange('precipitationChance', value)}
@@ -604,18 +553,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
 
-          <FormControl>
-            <FormLabel>
-              <HStack spacing={2}>
-                <ArrowUpIcon />
-                <Text>Peak Altitude (feet)</Text>
-                <Tooltip label={peakAltitudeTooltip} placement="top">
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Peak Altitude (feet)"
+            tooltip={peakAltitudeTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.peakAltitude}
               onChange={(_: string, value: number) => handleInputChange('peakAltitude', value)}
@@ -626,32 +570,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
 
-          <FormControl>
-            <FormLabel>
-              <HStack justify="space-between" align="center" mb={2}>
-                <FormLabel mb={0}>
-                  <HStack spacing={2}>
-                    <ViewIcon />
-                    <Text>Base Weight (lbs)</Text>
-                  </HStack>
-                </FormLabel>
-                <Tooltip 
-                  label={baseWeightTooltip}
-                  placement="top"
-                  hasArrow
-                >
-                  <IconButton
-                    aria-label="Help with base weight"
-                    icon={<InfoIcon />}
-                    size="sm"
-                    variant="ghost"
-                    colorScheme="brand"
-                  />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Base Weight (lbs)"
+            tooltip={baseWeightTooltip}
+            labelIcon={<ViewIcon />}
+          >
             <NumberInput
               value={formData.baseWeight}
               onChange={(valueString: string) => handleInputChange('baseWeight', valueString)}
@@ -664,25 +589,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
 
-          <FormControl>
-            <FormLabel>
-              <HStack justify="space-between" align="center" mb={2}>
-                <FormLabel mb={0}>
-                  <HStack spacing={2}>
-                    <ArrowUpIcon />
-                    <Text>Water Weight (lbs)</Text>
-                  </HStack>
-                </FormLabel>
-                <Tooltip 
-                  label={waterWeightTooltip}
-                  placement="top"
-                >
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Water Weight (lbs)"
+            tooltip={waterWeightTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.waterWeight}
               onChange={(valueString: string) => handleInputChange('waterWeight', valueString)}
@@ -695,21 +608,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
 
-          <FormControl>
-            <FormLabel>
-              <HStack spacing={2}>
-                <StarIcon />
-                <Text>Hiker Experience</Text>
-                <Tooltip 
-                  label={hikerExperienceTooltip}
-                  placement="top"
-                >
-                  <InfoIcon color="brand.500" />
-                </Tooltip>
-              </HStack>
-            </FormLabel>
+          <LabeledFormField
+            label="Hiker Experience"
+            tooltip={hikerExperienceTooltip}
+            labelIcon={<StarIcon />}
+          >
             <Select
               value={formData.hikerExperience}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange('hikerExperience', e.target.value)}
@@ -721,7 +626,7 @@ const CalorieCalculator: React.FC = () => {
               <option value="advanced">Advanced</option>
               <option value="expert">Expert</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </VStack>
       </Box>
       <Box mb={8}>
