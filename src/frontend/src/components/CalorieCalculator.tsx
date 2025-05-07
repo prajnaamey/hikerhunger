@@ -56,9 +56,43 @@ import {
   StepIcon,
   StepNumber,
   useSteps,
+  Tooltip,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import {
+  AddIcon,
+  DeleteIcon,
+  InfoIcon,
+  EditIcon,
+  CalendarIcon,
+  SunIcon,
+  StarIcon,
+  TimeIcon,
+  TriangleUpIcon,
+  ArrowUpIcon,
+  RepeatIcon,
+  ViewIcon,
+  AtSignIcon,
+  ArrowBackIcon,
+} from '@chakra-ui/icons';
+import {
+  activityLevelTooltip,
+  weightTooltip,
+  heightTooltip,
+  genderTooltip,
+  trailDistanceTooltip,
+  totalElevationTooltip,
+  seasonTooltip,
+  averageTemperatureTooltip,
+  precipitationChanceTooltip,
+  peakAltitudeTooltip,
+  baseWeightTooltip,
+  waterWeightTooltip,
+  hikerExperienceTooltip
+} from '../shared/tooltipContent';
+import { LabeledFormField } from '../shared/LabeledFormField';
 
 interface FormData {
   // User Biometrics
@@ -264,8 +298,12 @@ const CalorieCalculator: React.FC = () => {
         </GridItem>
         
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Weight (lbs)</FormLabel>
+          <LabeledFormField
+            label="Weight (lbs)"
+            tooltip={weightTooltip}
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <NumberInput
               value={formData.weight}
               onChange={(valueString) => handleInputChange('weight', valueString)}
@@ -278,12 +316,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Height</FormLabel>
+          <LabeledFormField
+            label="Height"
+            tooltip={heightTooltip}
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <Box display="flex" gap={2}>
               <NumberInput
                 value={formData.heightFeet}
@@ -312,12 +354,15 @@ const CalorieCalculator: React.FC = () => {
               </NumberInput>
               <Text alignSelf="center">in</Text>
             </Box>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Age (years)</FormLabel>
+          <LabeledFormField
+            label="Age (years)"
+            isRequired
+            labelIcon={<EditIcon />}
+          >
             <NumberInput
               value={formData.age}
               onChange={(_, value) => handleInputChange('age', value)}
@@ -328,41 +373,49 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Gender</FormLabel>
+          <LabeledFormField
+            label="Gender"
+            tooltip={genderTooltip}
+            isRequired
+            labelIcon={<AtSignIcon />}
+          >
             <Select
               value={formData.gender}
               onChange={(e) => handleInputChange('gender', e.target.value)}
-              placeholder="Male"
+              placeholder="Select gender"
+              variant="filled"
             >
-              <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Activity Level</FormLabel>
+          <LabeledFormField
+            label="Activity Level"
+            tooltip={activityLevelTooltip}
+            isRequired
+            labelIcon={<RepeatIcon />}
+          >
             <Select
               value={formData.activityLevel}
               onChange={(e) => handleInputChange('activityLevel', e.target.value)}
-              placeholder="Moderately Active"
+              placeholder="Select activity level"
+              variant="filled"
             >
-              <option value="">Select activity level</option>
               <option value="sedentary">Sedentary</option>
               <option value="lightly_active">Lightly Active</option>
               <option value="moderately_active">Moderately Active</option>
               <option value="very_active">Very Active</option>
               <option value="extra_active">Extra Active</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         {/* Trip Details */}
@@ -372,7 +425,12 @@ const CalorieCalculator: React.FC = () => {
 
         <GridItem>
           <FormControl isRequired>
-            <FormLabel>Trip Duration (days)</FormLabel>
+            <FormLabel>
+              <HStack spacing={2}>
+                <EditIcon />
+                <Text>Trip Duration (days)</Text>
+              </HStack>
+            </FormLabel>
             <NumberInput
               value={formData.tripDuration}
               onChange={(_, value) => handleInputChange('tripDuration', value)}
@@ -387,8 +445,12 @@ const CalorieCalculator: React.FC = () => {
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Trail Distance (miles)</FormLabel>
+          <LabeledFormField
+            label="Trail Distance (miles)"
+            tooltip={trailDistanceTooltip}
+            isRequired
+            labelIcon={<TimeIcon />}
+          >
             <NumberInput
               value={formData.trailDistance}
               onChange={(valueString) => handleInputChange('trailDistance', valueString)}
@@ -401,12 +463,16 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Total Elevation (feet)</FormLabel>
+          <LabeledFormField
+            label="Total Elevation (feet)"
+            tooltip={totalElevationTooltip}
+            isRequired
+            labelIcon={<TriangleUpIcon />}
+          >
             <NumberInput
               value={formData.totalElevation}
               onChange={(_, value) => handleInputChange('totalElevation', value)}
@@ -417,24 +483,28 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
 
         <GridItem>
-          <FormControl isRequired>
-            <FormLabel>Season</FormLabel>
+          <LabeledFormField
+            label="Season"
+            tooltip={seasonTooltip}
+            isRequired
+            labelIcon={<SunIcon />}
+          >
             <Select
               value={formData.season}
               onChange={(e) => handleInputChange('season', e.target.value)}
-              placeholder="Summer"
+              placeholder="Select season"
+              variant="filled"
             >
-              <option value="">Select season</option>
               <option value="spring">Spring</option>
               <option value="summer">Summer</option>
               <option value="fall">Fall</option>
               <option value="winter">Winter</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </GridItem>
       </Grid>
       <Box mt={8} display="flex" justifyContent="flex-end" gap={4}>
@@ -452,8 +522,11 @@ const CalorieCalculator: React.FC = () => {
       <Box mb={8}>
         <Heading size="sm" mb={4}>Environmental & Pack Details</Heading>
         <VStack spacing={4} align="stretch">
-          <FormControl>
-            <FormLabel>Average Temperature (°F)</FormLabel>
+          <LabeledFormField
+            label="Average Temperature (°F)"
+            tooltip={averageTemperatureTooltip}
+            labelIcon={<ViewIcon />}
+          >
             <NumberInput
               value={formData.averageTemperature}
               onChange={(_: string, value: number) => handleInputChange('averageTemperature', value)}
@@ -464,9 +537,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Precipitation Chance (%)</FormLabel>
+          </LabeledFormField>
+
+          <LabeledFormField
+            label="Precipitation Chance (%)"
+            tooltip={precipitationChanceTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.precipitationChance}
               onChange={(_: string, value: number) => handleInputChange('precipitationChance', value)}
@@ -477,9 +554,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Peak Altitude (feet)</FormLabel>
+          </LabeledFormField>
+
+          <LabeledFormField
+            label="Peak Altitude (feet)"
+            tooltip={peakAltitudeTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.peakAltitude}
               onChange={(_: string, value: number) => handleInputChange('peakAltitude', value)}
@@ -490,9 +571,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Base Weight (lbs)</FormLabel>
+          </LabeledFormField>
+
+          <LabeledFormField
+            label="Base Weight (lbs)"
+            tooltip={baseWeightTooltip}
+            labelIcon={<ViewIcon />}
+          >
             <NumberInput
               value={formData.baseWeight}
               onChange={(valueString: string) => handleInputChange('baseWeight', valueString)}
@@ -505,9 +590,13 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Water Weight (lbs)</FormLabel>
+          </LabeledFormField>
+
+          <LabeledFormField
+            label="Water Weight (lbs)"
+            tooltip={waterWeightTooltip}
+            labelIcon={<ArrowUpIcon />}
+          >
             <NumberInput
               value={formData.waterWeight}
               onChange={(valueString: string) => handleInputChange('waterWeight', valueString)}
@@ -520,12 +609,17 @@ const CalorieCalculator: React.FC = () => {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-          </FormControl>
-          <FormControl>
-            <FormLabel>Hiker Experience</FormLabel>
+          </LabeledFormField>
+
+          <LabeledFormField
+            label="Hiker Experience"
+            tooltip={hikerExperienceTooltip}
+            labelIcon={<StarIcon />}
+          >
             <Select
               value={formData.hikerExperience}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleInputChange('hikerExperience', e.target.value)}
+              variant="filled"
             >
               <option value="">Select experience level</option>
               <option value="beginner">Beginner</option>
@@ -533,7 +627,7 @@ const CalorieCalculator: React.FC = () => {
               <option value="advanced">Advanced</option>
               <option value="expert">Expert</option>
             </Select>
-          </FormControl>
+          </LabeledFormField>
         </VStack>
       </Box>
       <Box mb={8}>
