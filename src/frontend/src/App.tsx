@@ -95,6 +95,47 @@ const theme = extendTheme({
             transform: 'translateY(-1px)',
           },
         },
+        icon: {
+          color: props.colorMode === 'dark' ? 'whiteAlpha.900' : 'gray.600',
+        },
+      }),
+      variants: {
+        filled: (props: any) => ({
+          field: {
+            bg: props.colorMode === 'dark' ? 'whiteAlpha.50' : 'gray.50',
+            _hover: {
+              bg: props.colorMode === 'dark' ? 'whiteAlpha.100' : 'gray.100',
+            },
+            _focus: {
+              bg: props.colorMode === 'dark' ? 'whiteAlpha.100' : 'white',
+            },
+          },
+        }),
+      },
+    },
+    FormLabel: {
+      baseStyle: (props: any) => ({
+        color: props.colorMode === 'dark' ? 'whiteAlpha.900' : 'gray.700',
+        fontWeight: 'medium',
+        mb: 2,
+      }),
+    },
+    NumberInput: {
+      baseStyle: (props: any) => ({
+        field: {
+          bg: props.colorMode === 'dark' ? 'whiteAlpha.100' : 'white',
+          borderColor: props.colorMode === 'dark' ? 'whiteAlpha.300' : 'gray.200',
+          transition: 'all 0.2s ease-in-out',
+          _hover: {
+            borderColor: props.colorMode === 'dark' ? 'whiteAlpha.400' : 'gray.300',
+            transform: 'translateY(-1px)',
+          },
+          _focus: {
+            borderColor: 'brand.500',
+            boxShadow: `0 0 0 1px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.500'}, 0 0 8px ${props.colorMode === 'dark' ? 'brand.500' : 'brand.300'}`,
+            transform: 'translateY(-1px)',
+          },
+        },
       }),
     },
     Card: {
@@ -115,6 +156,25 @@ const theme = extendTheme({
           borderColor: props.colorMode === 'dark' ? 'whiteAlpha.200' : 'gray.200',
         },
       }),
+    },
+    Tooltip: {
+      baseStyle: (props: any) => ({
+        bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.800',
+        color: 'white',
+        borderRadius: 'md',
+        px: 3,
+        py: 2,
+        fontSize: 'sm',
+        fontWeight: 'medium',
+        boxShadow: 'lg',
+        maxW: '320px',
+        zIndex: 1500,
+      }),
+      defaultProps: {
+        openDelay: 300,
+        closeDelay: 200,
+        placement: 'top',
+      },
     },
   },
 });

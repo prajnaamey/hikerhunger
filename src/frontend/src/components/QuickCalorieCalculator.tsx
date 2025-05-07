@@ -40,9 +40,19 @@ import {
   StatGroup,
   useToast,
   IconButton,
+  Tooltip,
 } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, AddIcon, DeleteIcon, InfoIcon, EditIcon, CalendarIcon, SunIcon, StarIcon, TimeIcon, TriangleUpIcon, ArrowUpIcon, RepeatIcon, ViewIcon, AtSignIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
+import {
+  activityLevelTooltip,
+  weightTooltip,
+  heightTooltip,
+  genderTooltip,
+  trailDistanceTooltip,
+  totalElevationTooltip,
+  seasonTooltip
+} from '../shared/tooltipContent';
 
 interface CalorieResponse {
   daily_breakdown: {
@@ -235,7 +245,7 @@ const QuickCalorieCalculator: React.FC = () => {
 
                 <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4} w="100%">
                   <GridItem>
-                    <FormControl isRequired>
+                    <FormControl>
                       <FormLabel color={labelColor}>Weight (lbs)</FormLabel>
                       <NumberInput value={Number(formData.weight) || ''} onChange={(_, v) => handleInputChange('weight', v)} min={0}>
                         <NumberInputField />
@@ -244,7 +254,7 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
+                    <FormControl>
                       <FormLabel color={labelColor}>Height</FormLabel>
                       <HStack>
                         <NumberInput value={Number(formData.heightFeet) || ''} min={0} max={8} onChange={(_, v) => handleInputChange('heightFeet', v)}>
@@ -258,7 +268,7 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
+                    <FormControl>
                       <FormLabel color={labelColor}>Age (years)</FormLabel>
                       <NumberInput value={Number(formData.age) || ''} onChange={(_, v) => handleInputChange('age', v)} min={0}>
                         <NumberInputField />
@@ -267,7 +277,7 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
+                    <FormControl>
                       <FormLabel color={labelColor}>Gender</FormLabel>
                       <Select 
                         value={formData.gender} 
@@ -281,11 +291,32 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
-                      <FormLabel color={labelColor}>Activity Level</FormLabel>
+                    <FormControl>
+                      <HStack justify="space-between" align="center" mb={2}>
+                        <FormLabel mb={0}>
+                          <HStack spacing={2}>
+                            <RepeatIcon />
+                            <Text>Activity Level</Text>
+                          </HStack>
+                        </FormLabel>
+                        <Tooltip 
+                          label={activityLevelTooltip}
+                          placement="top"
+                          hasArrow
+                        >
+                          <IconButton
+                            aria-label="Help with activity level"
+                            icon={<InfoIcon />}
+                            size="sm"
+                            variant="ghost"
+                            colorScheme="brand"
+                          />
+                        </Tooltip>
+                      </HStack>
                       <Select 
                         value={formData.activityLevel} 
                         onChange={(e) => handleInputChange('activityLevel', e.target.value)}
+                        variant="filled"
                       >
                         <option value="">Select activity level</option>
                         <option value="sedentary">Sedentary</option>
@@ -298,8 +329,28 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
-                      <FormLabel color={labelColor}>Trail Distance (miles)</FormLabel>
+                    <FormControl>
+                      <HStack justify="space-between" align="center" mb={2}>
+                        <FormLabel mb={0}>
+                          <HStack spacing={2}>
+                            <TimeIcon />
+                            <Text>Trail Distance (miles)</Text>
+                          </HStack>
+                        </FormLabel>
+                        <Tooltip 
+                          label={trailDistanceTooltip}
+                          placement="top"
+                          hasArrow
+                        >
+                          <IconButton
+                            aria-label="Help with trail distance"
+                            icon={<InfoIcon />}
+                            size="sm"
+                            variant="ghost"
+                            colorScheme="brand"
+                          />
+                        </Tooltip>
+                      </HStack>
                       <NumberInput value={Number(formData.trailDistance) || ''} onChange={(_, v) => handleInputChange('trailDistance', v)} min={0}>
                         <NumberInputField />
                       </NumberInput>
@@ -307,8 +358,28 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
-                      <FormLabel color={labelColor}>Total Elevation (ft)</FormLabel>
+                    <FormControl>
+                      <HStack justify="space-between" align="center" mb={2}>
+                        <FormLabel mb={0}>
+                          <HStack spacing={2}>
+                            <TriangleUpIcon />
+                            <Text>Total Elevation (ft)</Text>
+                          </HStack>
+                        </FormLabel>
+                        <Tooltip 
+                          label={totalElevationTooltip}
+                          placement="top"
+                          hasArrow
+                        >
+                          <IconButton
+                            aria-label="Help with elevation"
+                            icon={<InfoIcon />}
+                            size="sm"
+                            variant="ghost"
+                            colorScheme="brand"
+                          />
+                        </Tooltip>
+                      </HStack>
                       <NumberInput value={Number(formData.totalElevation) || ''} onChange={(_, v) => handleInputChange('totalElevation', v)} min={0}>
                         <NumberInputField />
                       </NumberInput>
@@ -316,17 +387,38 @@ const QuickCalorieCalculator: React.FC = () => {
                   </GridItem>
 
                   <GridItem>
-                    <FormControl isRequired>
-                      <FormLabel color={labelColor}>Season</FormLabel>
+                    <FormControl>
+                      <HStack justify="space-between" align="center" mb={2}>
+                        <FormLabel mb={0}>
+                          <HStack spacing={2}>
+                            <SunIcon />
+                            <Text>Season</Text>
+                          </HStack>
+                        </FormLabel>
+                        <Tooltip 
+                          label={seasonTooltip}
+                          placement="top"
+                          hasArrow
+                        >
+                          <IconButton
+                            aria-label="Help with season"
+                            icon={<InfoIcon />}
+                            size="sm"
+                            variant="ghost"
+                            colorScheme="brand"
+                          />
+                        </Tooltip>
+                      </HStack>
                       <Select 
                         value={formData.season} 
                         onChange={(e) => handleInputChange('season', e.target.value)}
+                        variant="filled"
                       >
                         <option value="">Select season</option>
-                        <option value="summer">Summer</option>
-                        <option value="winter">Winter</option>
                         <option value="spring">Spring</option>
+                        <option value="summer">Summer</option>
                         <option value="fall">Fall</option>
+                        <option value="winter">Winter</option>
                       </Select>
                     </FormControl>
                   </GridItem>
