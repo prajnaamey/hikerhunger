@@ -764,26 +764,26 @@ const CalorieCalculator: React.FC = () => {
                 {/* Daily Breakdown */}
                 <Box>
                   <Heading size="md" mb={4}>Daily Breakdown</Heading>
-                  <Table variant="simple">
+                  <Table variant="simple" size="sm" mt={4} style={{ tableLayout: 'fixed' }}>
                     <Thead>
                       <Tr>
-                        <Th>Day</Th>
-                        <Th>Calories</Th>
-                        <Th>Carbs (g)</Th>
-                        <Th>Fat (g)</Th>
-                        <Th>Protein (g)</Th>
-                        <Th>Hiking Hours</Th>
+                        <Th width="12%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Day</Th>
+                        <Th width="18%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Calories</Th>
+                        <Th width="19%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Carbs (g)</Th>
+                        <Th width="15%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Fat (g)</Th>
+                        <Th width="21%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Protein (g)</Th>
+                        <Th width="20%" style={{ textTransform: 'none', verticalAlign: 'top' }}>Hiking Hours</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {calculationResult.daily_breakdown.map((day) => (
-                        <Tr key={day.day}>
-                          <Td>{day.day}</Td>
-                          <Td>{formatNumber(day.calories)}</Td>
-                          <Td>{formatNumber(day.macros.carbs)}</Td>
-                          <Td>{formatNumber(day.macros.fat)}</Td>
-                          <Td>{formatNumber(day.macros.protein)}</Td>
-                          <Td>{day.hiking_hours}</Td>
+                      {calculationResult.daily_breakdown.map((dayData) => (
+                        <Tr key={dayData.day}>
+                          <Td>{dayData.day}</Td>
+                          <Td>{dayData.calories}</Td>
+                          <Td>{dayData.macros.carbs}</Td>
+                          <Td>{dayData.macros.fat}</Td>
+                          <Td>{dayData.macros.protein}</Td>
+                          <Td>{dayData.hiking_hours}</Td>
                         </Tr>
                       ))}
                     </Tbody>
