@@ -188,15 +188,24 @@ verify_backend() {
 
 # ===== Frontend Functions =====
 setup_frontend() {
-    echo -e "${YELLOW}Frontend setup not implemented yet${NC}"
+    echo -e "${YELLOW}Setting up frontend...${NC}"
+    cd src/frontend
+    npm install --force
+    cd ../..
+    echo -e "${GREEN}Frontend setup complete!${NC}"
 }
 
 start_frontend() {
-    echo -e "${YELLOW}Frontend start not implemented yet${NC}"
+    echo -e "${YELLOW}Starting frontend...${NC}"
+    cd src/frontend
+    npm start
+    cd ../..
 }
 
 stop_frontend() {
-    echo -e "${YELLOW}Frontend stop not implemented yet${NC}"
+    echo -e "${YELLOW}Stopping frontend...${NC}"
+    pkill -f "react-scripts start"
+    echo -e "${GREEN}Frontend stopped!${NC}"
 }
 
 # ===== Help and Usage =====
@@ -231,7 +240,8 @@ show_help() {
     echo "  ./hikerhunger.sh backend verify        # Verify API is working"
     echo "  ./hikerhunger.sh backend rebuild       # Rebuild after dependency changes"
     echo "  ./hikerhunger.sh backend start --local # Start locally"
-    echo "  ./hikerhunger.sh app setup            # Setup both backend and frontend"
+    echo "  ./hikerhunger.sh app setup             # Setup both backend and frontend"
+    echo "  ./hikerhunger.sh frontend start        # Setup and start frontend"
 }
 
 # ===== Command Handlers =====
